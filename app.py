@@ -9,14 +9,11 @@ def home():
 
 @app.route('/okx', methods=['GET'])
 def okx_proxy():
-    # base path + query string 전체 붙이기
     path = request.args.get('path', '')
-    query_string = request.query_string.decode()
-    # query_string 에 path= 까지 포함되어 있으므로 제거
-    if query_string.startswith('path='):
-        path = query_string[5:]
+    if not path.startswith('/'):
+        path = '/' + path
     okx_url = f'https://www.okx.com{path}'
-
+    
     try:
         response = requests.get(okx_url, headers={
             'User-Agent': 'Mozilla/5.0'
